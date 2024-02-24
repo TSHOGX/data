@@ -37,6 +37,8 @@ def find_matching_items(json_data, game_name):
                     character_name, card_name = matches[0]
                     if not "<br />" in card_name:
                         cleaned_text = remove_pattern.sub('', item['text'])
+                        pics_weibo = item['pics'].split(",") if 'pics' in item else []
+                        video_weibo = item['video_url'].split(",") if 'video_url' in item else []
                         matching_items.append({
                             "title": f"{character_name}・{card_name}",
                             "character_name": character_name,
@@ -44,6 +46,8 @@ def find_matching_items(json_data, game_name):
                             "id": item["id"],
                             "text": cleaned_text,
                             "created_at": item["created_at"],
+                            "pics_weibo": pics_weibo,
+                            "video_weibo": video_weibo,
                         })
 
     elif game_name == "恋与深空":
@@ -58,6 +62,8 @@ def find_matching_items(json_data, game_name):
                     character_name, card_name = matches[0]
                     if not "<br />" in card_name and not "<br />" in character_name:
                         cleaned_text = remove_pattern.sub('', item['text'])
+                        pics_weibo = item['pics'].split(",") if 'pics' in item else []
+                        video_weibo = item['video_url'].split(",") if 'video_url' in item else []
                         matching_items.append({
                             "title": f"{character_name}・{card_name}",
                             "character_name": character_name,
@@ -65,6 +71,8 @@ def find_matching_items(json_data, game_name):
                             "id": item["id"],
                             "text": cleaned_text,
                             "created_at": item["created_at"],
+                            "pics_weibo": pics_weibo,
+                            "video_weibo": video_weibo,
                         })
 
     return matching_items
