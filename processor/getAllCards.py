@@ -4,23 +4,19 @@ import os
 import shutil
 
 
+file_path = "./weibo.json"
+
 BILIBILI_JSON_PREFIX = "../bilibili/data/"
 
 GAMENAME = "光与夜之恋"
-file_path = "6880285576.json"
-out_path = "LightAndNight.json"
-new_media_dir = "./media/LightAndNight/"
-image_dir = "../weibo/weibo/光与夜之恋/img/原创微博图片/"
-video_dir = "../weibo/weibo/光与夜之恋/video/原创微博视频/"
+GAMENAME = "恋与深空"
+GAMENAME = "恋与深空画廊"
+GAMENAME = "蓝咕咕图像站"
 
-# GAMENAME = "恋与深空"
-# file_path = "7484247626.json"
-# out_path = "LoveAndDeepspace.json"
-# new_media_dir = "./media/LoveAndDeepspace/"
-# image_dir = "../weibo/weibo/恋与深空/img/原创微博图片/"
-# video_dir = "../weibo/weibo/恋与深空/video/原创微博视频/"
-
-
+out_path = f"{GAMENAME}.json"
+new_media_dir = f"./media/{GAMENAME}/"
+image_dir = f"../weibo/weibo/{GAMENAME}/img/原创微博图片/"
+video_dir = f"../weibo/weibo/{GAMENAME}/video/原创微博视频/"
 
 
 def find_matching_items(json_data, game_name):
@@ -51,16 +47,26 @@ def find_matching_items(json_data, game_name):
                         })
 
     elif game_name == "恋与深空":
-        pattern = re.compile(r"思念「(.+?)·(.+?)」")
+        pattern_1 = re.compile(r"思念「沈星回·(.+?)」")
+        pattern_2 = re.compile(r"思念「黎深·(.+?)」")
+        pattern_3 = re.compile(r"思念「祁煜·(.+?)」")
         remove_pattern = re.compile(r".*class=\"surl-text\">恋与深空</span></a>")
     
         for item in json_data:
-            if 'text' in item:
-                matches = pattern.findall(item['text'])
+            if 'text' in item and "停服更新维护公告" not in item['text']:
+                matches_1 = pattern_1.findall(item['text'])
+                matches_2 = pattern_2.findall(item['text'])
+                matches_3 = pattern_3.findall(item['text'])
                 # if all matches are same
-                if len(matches) > 0 and all(x == matches[0] for x in matches):
-                    character_name, card_name = matches[0]
-                    if not "<br />" in card_name and not "<br />" in character_name:
+                # if not len(matches_1) > 0 and all(x == matches[0] for x in matches):
+                if not (len(matches_1) > 0 and len(matches_2) > 0 and len(matches_3) > 0):
+                    if len(matches_1) > 0:
+                        character_name, card_name = "沈星回" , matches_1[0]
+                    elif len(matches_2) > 0:
+                        character_name, card_name = "黎深", matches_2[0]
+                    elif len(matches_3) > 0:
+                        character_name, card_name = "祁煜", matches_3[0]
+                    if not "<br />" in card_name:
                         cleaned_text = remove_pattern.sub('', item['text'])
                         pics_weibo = item['pics'].split(",") if 'pics' in item else []
                         video_weibo = item['video_url'].split(",") if 'video_url' in item else []
