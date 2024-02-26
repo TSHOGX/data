@@ -309,8 +309,10 @@ for card in card_json:
             if weibo["created_at"] < card["created_at"]:
                 card["created_at"] = weibo["created_at"]
     if card["created_at"] == "2025-01-01 00:00:00":
-        card["created_at"] == "2020-01-01 00:00:00"
+        card["created_at"] = "2020-01-01 00:00:00"
 
+# sort card_json by created_at, inverse order
+card_json = sorted(card_json, key=lambda x: x["created_at"], reverse=True)
 
 # assign unique id to each card
 for i, card in enumerate(card_json):
