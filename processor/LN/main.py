@@ -21,27 +21,27 @@ with open(f"./data/bilibili/bilibili.json", "r", encoding="utf-8") as file:
     bilibili_json = json.load(file)
 
 
-# match bilibili video and card
+# match bilibili_video and card
 for card in card_json:
-    card["bilibili video"] = []
+    card["bilibili_video"] = []
     for video in bilibili_json:
-        if card["card name"] in video["title"]:
-            card["bilibili video"].append(video["href"])
+        if card["card_name"] in video["title"]:
+            card["bilibili_video"].append(video["href"])
     if (
-        len(card["bilibili video"]) == 0
+        len(card["bilibili_video"]) == 0
         and card["stars"] in ["5", "6"]
         and card["type"] not in ["邂逅"]
     ):
         # fix wrong name in bilibili: 囚镜 - 囚境; 炽热烟尘 - 炽热尘烟; 时光玫瑰 - 时与玫瑰; 昼日疑魂 - 昼日凝魂; 指尖心音 - 指间心音
         # fix wrong name in cardstxt: 暮间诉愿 - 幕间诉愿
-        print(card["card name"], card["bilibili video"])
+        print(card["card_name"], card["bilibili_video"])
 # with open(f"./card_and_video.json", "r", encoding="utf-8") as file:
 #     card_json = json.load(file)
 
 
 # match weibo with card
 for card in card_json:
-    card_name = card["card name"]
+    card_name = card["card_name"]
     card["weibo"] = []
     for weibo in weibo_json:
         for text in weibo["text"]:
@@ -68,7 +68,7 @@ for card in card_json:
         card["weibo"].remove(4624605711697957)
     # make sure all 5 or 6 stars card has one weibo
     if len(card["weibo"]) != 1 and card["stars"] in ["5", "6"]:
-        print(card["card name"], card["weibo"])
+        print(card["card_name"], card["weibo"])
     # for other stars card, make sure all weibo has no more than one card (can be missing)
     if len(card["weibo"]) >= 2:
         for weiboid in card["weibo"]:
@@ -83,7 +83,7 @@ for card in card_json:
                     card["weibo"] = [weiboid]
                     break
     if len(card["weibo"]) >= 2:
-        print(card["card name"], card["weibo"])
+        print(card["card_name"], card["weibo"])
 
 # add matched weibo to weibo set
 weibo_set = []
@@ -97,7 +97,7 @@ for card in card_json:
 weibo_json = weibo_set
 
 
-# remove problematic weibo pics
+# remove problematic weibo_imgs
 for item in weibo_json:
     if item["id"] in [4867860037895975, 4864857613275374, 4809555885688941]:
         item["pics"] = item["pics"][:-1]
@@ -139,7 +139,7 @@ for item in weibo_json:
     item["matched"] = []
     for text in item["text"]:
         for card in card_json:
-            card_name = card["card name"]
+            card_name = card["card_name"]
             matched_name = f"{card_name}-{card['stars']}"
             if card_name in text and matched_name not in item["matched"]:
                 item["matched"].append(matched_name)
@@ -184,8 +184,8 @@ for item in weibo_json:
             temp[card_name].append(item["pics"][count])
             count += 1
     for key, value in temp.items():
-        if key not in [item["card name"] for item in matched_cards]:
-            matched_cards.append({"card name": key, "pics": value})
+        if key not in [item["card_name"] for item in matched_cards]:
+            matched_cards.append({"card_name": key, "pics": value})
 # # write to json file
 # with open(f"weibo_card.json", "w", encoding="utf-8") as file:
 #     json.dump(matched_cards, file, ensure_ascii=False, indent=4)
@@ -193,94 +193,94 @@ for item in weibo_json:
 
 # add to card json
 for card in card_json:
-    card["weibo pics"] = []
+    card["weibo_imgs"] = []
     for matched in matched_cards:
-        if card["card name"] == matched["card name"]:
-            card["weibo pics"] = matched["pics"]
+        if card["card_name"] == matched["card_name"]:
+            card["weibo_imgs"] = matched["pics"]
 
 
-# final fix missing weibo pics
+# final fix missing weibo_imgs
 missing_weibo = [
     {
-        "card name": "不训",
-        "weibo pics": [
+        "card_name": "不训",
+        "weibo_imgs": [
             "https://wx4.sinaimg.cn/large/008gIjwSgy1gpf5mril05j31901wc7wi.jpg"
         ],
         "weibo": [4624605711697957],
     },
     {
-        "card name": "黑色沉沦",
-        "weibo pics": [
+        "card_name": "黑色沉沦",
+        "weibo_imgs": [
             "https://wx1.sinaimg.cn/large/008gIjwSgy1grx27pad7ij31o02jhx6p.jpg"
         ],
         "weibo": [4652786367858167],
     },
     {
-        "card name": "尘埃银河",
-        "weibo pics": [
+        "card_name": "尘埃银河",
+        "weibo_imgs": [
             "https://wx1.sinaimg.cn/large/008gIjwSgy1grx27pad7ij31o02jhx6p.jpg"
         ],
         "weibo": [4652786367858167],
     },
     {
-        "card name": "与你同坠",
-        "weibo pics": [
+        "card_name": "与你同坠",
+        "weibo_imgs": [
             "https://wx1.sinaimg.cn/large/008gIjwSgy1grx27dzsglj31o02jdu0y.jpg"
         ],
         "weibo": [4652786367858167],
     },
     {
-        "card name": "迷迭暗巷",
-        "weibo pics": [
+        "card_name": "迷迭暗巷",
+        "weibo_imgs": [
             "https://wx1.sinaimg.cn/large/008gIjwSgy1grx275mo32j61o02jf1ky02.jpg"
         ],
         "weibo": [4652786367858167],
     },
     {
-        "card name": "暗巷沉沉",
-        "weibo pics": [
+        "card_name": "暗巷沉沉",
+        "weibo_imgs": [
             "https://wx4.sinaimg.cn/large/008gIjwSgy1grx26scmnoj31o02jd1ky.jpg"
         ],
         "weibo": [4652786367858167],
     },
     {
-        "card name": "急流",
-        "weibo pics": [
+        "card_name": "急流",
+        "weibo_imgs": [
             "https://wx1.sinaimg.cn/large/008gIjwSgy1grx272503nj31o02jfkjm.jpg"
         ],
         "weibo": [4652786367858167],
     },
     {
-        "card name": "即刻启程",
-        "weibo pics": [
+        "card_name": "即刻启程",
+        "weibo_imgs": [
             "https://wx4.sinaimg.cn/large/008gIjwSgy1grx284l39mj31o02jde82.jpg"
         ],
         "weibo": [4652786367858167],
     },
     {
-        "card name": "奇妙伙伴",
-        "weibo pics": [
+        "card_name": "奇妙伙伴",
+        "weibo_imgs": [
             "https://wx4.sinaimg.cn/large/008gIjwSgy1grx278jiakj31o02jbb2a.jpg"
         ],
         "weibo": [4652786367858167],
     },
     {
-        "card name": "专属方向",
-        "weibo pics": [
+        "card_name": "专属方向",
+        "weibo_imgs": [
             "https://wx4.sinaimg.cn/large/008gIjwSgy1grx27t0wpij31o02ja1kz.jpg"
         ],
         "weibo": [4652786367858167],
     },
     {
-        "card name": "火之洗礼",
-        "weibo pics": [
+        "card_name": "火之洗礼",
+        "weibo_imgs": [
             "https://wx1.sinaimg.cn/large/008gIjwSgy1grx287qtmjj31o02jgkjm.jpg"
         ],
         "weibo": [4652786367858167],
     },
     {
-        "card name": "燎原",
-        "weibo pics": [
+        "card_name": "燎原",
+        "weibo_imgs": [
             "https://wx1.sinaimg.cn/large/008gIjwSgy1hhq4ms9w10j33m8554u1d.jpg",
             "https://wx2.sinaimg.cn/large/008gIjwSgy1hhq4n4alh6j35eg30m4r7.jpg",
         ],
@@ -289,14 +289,33 @@ missing_weibo = [
 ]
 
 for card in card_json:
-    if card["weibo pics"] == [] or card["weibo"] == []:
+    if card["weibo_imgs"] == [] or card["weibo"] == []:
         for missing in missing_weibo:
-            if card["card name"] == missing["card name"]:
-                card["weibo pics"] = missing["weibo pics"]
+            if card["card_name"] == missing["card_name"]:
+                card["weibo_imgs"] = missing["weibo_imgs"]
                 card["weibo"] = missing["weibo"]
     if len(card["weibo"]) != 1:
-        print(card["card name"], card["weibo"])
+        print(card["card_name"], card["weibo"])
     card["weibo"] = str(card["weibo"][0])
+
+
+# search ealest created_at time in 6880285576.json with card_name in text
+with open(f"./data/weibo/6880285576.json", "r", encoding="utf-8") as file:
+    weibo_688 = json.load(file)["weibo"]
+for card in card_json:
+    card["created_at"] = "2025-01-01 00:00:00"
+    for weibo in weibo_688:
+        if card["card_name"] in weibo["text"]:
+            if weibo["created_at"] < card["created_at"]:
+                card["created_at"] = weibo["created_at"]
+    if card["created_at"] == "2025-01-01 00:00:00":
+        card["created_at"] == "2020-01-01 00:00:00"
+
+
+# assign unique id to each card
+for i, card in enumerate(card_json):
+    card["id"] = str(i + 1)
+
 
 # write to json file
 with open(f"LN.json", "w", encoding="utf-8") as file:

@@ -24,7 +24,7 @@ for character in CHARACTERS:
         card_json = {
             "title": f"{character}-{elements[1]}",
             "character": character,
-            "card name": elements[1],
+            "card_name": elements[1],
             "stars": elements[0],
             "activity": elements[3],
             "type": elements[4],
@@ -35,8 +35,8 @@ for character in CHARACTERS:
 
 # fix wrong name in cardstxt: 暮间诉愿 - 幕间诉愿
 for card in json_data:
-    if card["card name"] == "暮间诉愿":
-        card["card name"] = "幕间诉愿"
+    if card["card_name"] == "暮间诉愿":
+        card["card_name"] = "幕间诉愿"
         card["title"] = "夏鸣星-幕间诉愿"
 
 
