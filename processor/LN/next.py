@@ -24,7 +24,7 @@ def download_one_file(url, file_path, weibo_id):
         need_download = not file_exist
 
         if not need_download:
-            print("[MESSAGE] already downloaded " + file_path)
+            # print("[MESSAGE] already downloaded " + file_path)
             return
 
         s = requests.Session()
@@ -74,21 +74,20 @@ if not os.path.isdir("./media"):
 
 count = 0
 for card in card_json:
-    if count % 50 == 0:
-        # sleep for 10 seconds
-        time.sleep(10)
+    # if count % 50 == 0:
+    #     time.sleep(10)
     weibo_id = card["weibo"]
     title = card["title"]
-    card["local pics"] = []
-    if len(card["weibo pics"]) == 1:
+    card["local_imgs"] = []
+    if len(card["weibo_imgs"]) == 1:
         file_path = f"./media/{title}.{pic_url.split('.')[-1]}"
         download_one_file(pic_url, file_path, weibo_id)
-        card["local pics"].append(f"{title}.{pic_url.split('.')[-1]}")
+        card["local_imgs"].append(f"{title}.{pic_url.split('.')[-1]}")
     else:
-        for index, pic_url in enumerate(card["weibo pics"]):
+        for index, pic_url in enumerate(card["weibo_imgs"]):
             file_path = f"./media/{title}-{index}.{pic_url.split('.')[-1]}"
             download_one_file(pic_url, file_path, weibo_id)
-            card["local pics"].append(f"{title}-{index}.{pic_url.split('.')[-1]}")
+            card["local_imgs"].append(f"{title}-{index}.{pic_url.split('.')[-1]}")
     count += 1
 
 
